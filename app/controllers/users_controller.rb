@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
 
+	before_action :signed_in_user, only: [:create, :new, :edit, :update, :destroy]
+	before_action :check_post_owner, only: [:edit, :update, :destroy]
+
 	def show
 		@user = User.find(params[:id])
 	end
@@ -13,7 +16,7 @@ class UsersController < ApplicationController
 		if @user.save
 			flash[:success] = "Welcome to the Rails Blog!"
 			sign_in @user
-			redirect_to @user
+			redirect_to @users
 		else
 			flash[:error] = "Failed to create account. Try again."
 			redirect_to signup_path
